@@ -55,6 +55,7 @@ async def ask(ctx, *args):
         # TODO 今はprevious_convo, convo_idを取得出来ないため、N:1会話となる。
         # 将来的には N:Nにするつもり
         answer = chat.ask(message)
+        # answer, previous_convo_id, conversation_id = chat.ask(message) # TODO ライブラリ側実装待ち
         print("Chat GPT: " + answer)
         previous_convo_id, conversation_id = None, None
 
