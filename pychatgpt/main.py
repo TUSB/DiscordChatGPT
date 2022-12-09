@@ -156,7 +156,9 @@ class Chat:
         # If created, then return True
         return True
 
-    def ask(self, prompt: str, rep_queue: Queue or None = None) -> str or None:
+    # TODO Note: Change chat.ask() argument to pass conversation_id, previous_convo_id
+    # def ask(self, prompt: str, rep_queue: Queue or None = None) -> str or None:
+    def ask(self, prompt: str, rep_queue: Queue or None = None, conversation_id=None, previous_convo_id=None) -> str or None:
         if prompt is None:
             print(f"{Fore.RED}>> Enter a prompt.")
             raise Exceptions.PyChatGPTException("Enter a prompt.")
@@ -183,6 +185,9 @@ class Chat:
         # Get access token
         access_token = OpenAI.get_access_token()
 
+        # TODO Note: add conversation_id and previous_convo_id Sett
+        self.conversation_id = conversation_id
+        self.previous_convo_id = previous_convo_id
 
         answer, previous_convo, convo_id = ChatHandler.ask(auth_token=access_token,
                                                            prompt=prompt,
@@ -205,8 +210,9 @@ class Chat:
             self.__chat_history.append("Chat GPT: " + answer)
             self.save_data()
 
-
-        return answer
+        # TODO Note: Conversation_id and previous_convo_id are added to the return value.
+        # return answer
+        return answer, previous_convo, convo_id
 
     def save_data(self):
         if self.options.track:
