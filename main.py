@@ -54,10 +54,10 @@ async def ask(ctx, *args):
         print("You: " + message)
         # TODO 今はprevious_convo, convo_idを取得出来ないため、N:1会話となる。
         # 将来的には N:Nにするつもり
-        answer = chat.ask(message)
-        # answer, previous_convo_id, conversation_id = chat.ask(message) # TODO ライブラリ側実装待ち
+        # answer = chat.ask(message)
+        answer, previous_convo_id, conversation_id = chat.ask(message, previous_convo_id=previous_convo,
+                                                              conversation_id=convo_id)
         print("Chat GPT: " + answer)
-        previous_convo_id, conversation_id = None, None
 
         if answer == "Error":
             raise "[Error] We're working to restore all services as soon as possible. Please check back soon."
@@ -82,11 +82,6 @@ async def ask(ctx, *args):
             })
             tb = tb.tb_next
 
-        await ctx.send(str({
-            'type': type(ex).__name__,
-            'message': str(ex),
-            'trace': trace
-        }))
         embed = discord.Embed(title=f"{type(ex)}", description=f"'message': {str(ex)},", color=discord.Colour.red())
         embed.add_field(name="type", value=str(ex), inline=False)
         embed.add_field(name="trace", value=trace, inline=False)
@@ -117,20 +112,20 @@ async def reset(ctx, args=None):
     if args == "all":
         chat_history = {}
         if len(chat_history) == 0:
-            await ctx.send("全ユーザの会話を削除しました。")
+            await ctx.send("Reset Thread for all。")
         else:
-            await ctx.send("削除に失敗しました。")
+            await ctx.send("oops reset Thread")
     else:
         del chat_history[uid]
         if uid in chat_history:
-            await ctx.send(f"<@{uid}> の会話を削除しました。")
+            await ctx.send(f"<@{uid}> Reset Thread")
         else:
-            await ctx.send("Not fond History")
+            await ctx.send("Not fond Thread")
 
 
 @bot.command()
 async def kill(ctx):
-    await ctx.send("あ”……おぅ……！　あ”あ”あ”お、くぅぅぅ……！")
+    await ctx.send("Good bye")
     exit(0)
 
 
